@@ -1,5 +1,5 @@
 body {
-    background: #fafafa;
+    background: #a69494;
     color: #333333;
     margin-top: 5rem;
   }
@@ -29,10 +29,10 @@ body {
   }
   
   .content-section {
-    background: #ffffff;
+    background: #f0ecec;
     padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
+    border: 5px solid #dddddd;
+    border-radius: 5px;
     margin-bottom: 20px;
   }
   
@@ -58,7 +58,7 @@ body {
   .article-metadata {
     padding-bottom: 1px;
     margin-bottom: 4px;
-    border-bottom: 1px solid #e3e3e3
+    border-bottom: 1px solid #090225
   }
   
   .article-metadata a:hover {

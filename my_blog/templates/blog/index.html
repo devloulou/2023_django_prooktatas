@@ -1,7 +1,16 @@
 {% extends 'base/base.html' %}
 {% block content %}
     {% for post in posts%}
-    <p>{{ post.author }} - {{ post.title }}</p>
-    <p>{{ post.content }}</p>
+        <article class="media content-section">
+            <div class="article-metadata">
+                <h2><p class="article-title">{{ post.title }}</p></h2>            
+            </div>
+            <div class="article-metadata">
+                <p>{{ post.content }}</p>
+            </div>
+            <div>
+                <small class="text-muted"> post by {{ post.author }}</small>
+            </div>
+        </article>
     {% endfor %}
 {% endblock %}

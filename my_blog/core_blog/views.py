@@ -22,7 +22,7 @@ CRUD - Create Read Update Delete
 
 """
 
-
+# csak get request
 def index(request):
     context = {
         'posts': PostModel.objects.all() # select * from posts
@@ -32,6 +32,10 @@ def index(request):
     # test.save()
 
     return render(request, 'blog/index.html', context=context)
+
+def about_view(request):
+    return render(request, 'blog/about.html')
+
 
 def test_view(request):
     return HttpResponse("Test oldalon vagyok")
