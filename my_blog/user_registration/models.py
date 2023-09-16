@@ -9,4 +9,4 @@ class ProfileModel(models.Model):
         db_table = 'profile'
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.image.url} Profile'

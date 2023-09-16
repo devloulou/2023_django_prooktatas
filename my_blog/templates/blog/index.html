@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
 {% block content %}
     {% for post in posts%}
-        <article class="media content-section">
+        <article class="media content-section">           
             <div class="article-metadata">
                 <h2><a href="{% url 'post-detail' post.id %}" class="article-title">{{ post.title }}</a></h2>            
             </div>
@@ -9,7 +9,9 @@
                 <p>{{ post.content }}</p>
             </div>
             <div>
+                <img class="rounded-circle article-img" src="{{ post.author.profilemodel.image.url }}">
                 <small class="text-muted"> post by {{ post.author }}</small>
+                
             </div>
         </article>
     {% endfor %}
