@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from .models import PostModel
 from django.contrib.auth.models import User
 
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+
 """
 A View fogja renderelni a HTML file-okat és odaadni a böngészőnek
 """
@@ -25,17 +27,56 @@ CRUD - Create Read Update Delete
 # csak get request
 def index(request):
     context = {
-        'posts': PostModel.objects.all() # select * from posts
+        'posts': PostModel.objects.all().order_by('-date_posted') # select * from posts
     }
 
-    # test = PostModel.objects.create(title="Manual data", content="Ez egy test", author=User.objects.get(id=1))
-    # test.save()
-
     return render(request, 'blog/index.html', context=context)
+
+## index function based view  - Class Based View-t
+class PostsListView(ListView):
+    model = PostModel
+    template_name = 'blog/index.html'
+    context_object_name = 'posts'
+    ordering = ['-date_posted']
+
+class PostDetailView(DetailView):
+    model = PostModel
+    template_name = 'blog/post_detail.html'
+
+def post_detail_view(request, pk):
+    if request.method == 'POST':
+        return HttpResponse('Wrong request type')
+    
+    context = {
+        'object': PostModel.objects.get(id=pk)
+    }
+    return render(request, 'blog/post_detail.html', context=context)
+
+class PostCreateView(CreateView):
+    model = PostModel
+    template_name = 'blog/post_create.html'
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        # beégetjük, hogy minden user az admin legyen
+        # itt kellene lekérni az admin user-t
+        form.instance.author = User.objects.get(id=1)
+        return super().form_valid(form)
 
 def about_view(request):
     return render(request, 'blog/about.html')
 
-
 def test_view(request):
     return HttpResponse("Test oldalon vagyok")
+
+
+class PostDeleteView(DeleteView):
+    model = PostModel
+    template_name = 'blog/post_delete.html'
+    success_url = '/' #kezedő oldal
+
+
+class PostUpdateView(UpdateView):
+    model = PostModel
+    template_name = 'blog/post_create.html'
+    fields = ['title', 'content']
