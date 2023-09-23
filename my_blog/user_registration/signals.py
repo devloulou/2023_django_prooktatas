@@ -6,7 +6,13 @@ from .models import ProfileModel
 
 @receiver(post_save, sender=User)
 def create_profile(**kwargs):
-    with open('create_profile.txt', 'w', encoding="utf-8") as f:
-        f.write(str(kwargs))
-    print(kwargs)
-    print('létrejött a user')
+    if kwargs.get('created'):
+        # a Profil táblába jöjjön létre a rekord
+        ProfileModel.objects.create(user=kwargs.get('instance'))
+        # insert into profile(user, image) values (1, 'path_to_image')
+        # CRUD - Create Read Update Delete
+        # djangoban: Create - insert, Read - all()
+
+# @receiver(post_save, sender=User)
+# def save_profile(**kwargs):
+#     kwargs.get('instance').profilemodel.save()
