@@ -132,3 +132,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# a login view name értékét kell megadni
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'

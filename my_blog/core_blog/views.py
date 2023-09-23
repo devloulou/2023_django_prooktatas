@@ -6,6 +6,8 @@ from .models import PostModel
 from django.contrib.auth.models import User
 
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 """
 A View fogja renderelni a HTML file-okat és odaadni a böngészőnek
@@ -52,7 +54,7 @@ def post_detail_view(request, pk):
     }
     return render(request, 'blog/post_detail.html', context=context)
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = PostModel
     template_name = 'blog/post_create.html'
     fields = ['title', 'content']
@@ -60,7 +62,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         # beégetjük, hogy minden user az admin legyen
         # itt kellene lekérni az admin user-t
-        form.instance.author = User.objects.get(id=1)
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 def about_view(request):
@@ -70,13 +72,24 @@ def test_view(request):
     return HttpResponse("Test oldalon vagyok")
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = PostModel
     template_name = 'blog/post_delete.html'
     success_url = '/' #kezedő oldal
 
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PostModel
     template_name = 'blog/post_create.html'
     fields = ['title', 'content']
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False

@@ -1,11 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import UserRegisterForm
 
 # Create your views here.
 def register(request):   
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
-        print("megnyomtam a Sign Up gombot :D")
+        if form.is_valid():
+            form.save()
+
+            return redirect('/')
+
         # továbbo validációs lépések
     else:
         # amikor megnyitom a register oldalt, hogy generálja ki az üres form-ot

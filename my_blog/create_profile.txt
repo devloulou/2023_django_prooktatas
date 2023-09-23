@@ -1,0 +1,1 @@
+{'signal': <django.db.models.signals.ModelSignal object at 0x0000029503E42C50>, 'sender': <class 'django.contrib.auth.models.User'>, 'instance': <User: karcsi>, 'created': True, 'update_fields': None, 'raw': False, 'using': 'default'}
