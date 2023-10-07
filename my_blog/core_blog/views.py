@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 
 """
 A View fogja renderelni a HTML file-okat és odaadni a böngészőnek
@@ -40,6 +40,7 @@ class PostsListView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'posts'
     ordering = ['-date_posted']
+    paginate_by = 5
 
 class PostDetailView(DetailView):
     model = PostModel
@@ -83,8 +84,9 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin, UpdateView):
     model = PostModel
+    permission_required = "core_blog.change_postmodel"
     template_name = 'blog/post_create.html'
     fields = ['title', 'content']
 
