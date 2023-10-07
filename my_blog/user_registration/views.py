@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 # Create your views here.
@@ -7,7 +9,8 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()
-
+            username = form.cleaned_data.get('username')
+            messages.success(request, f"Sikeres regisztráció történt! User: {username}")
             return redirect('/')
 
         # további validációs lépések
@@ -17,6 +20,7 @@ def register(request):
 
     return render(request, 'user_registration/registration_form.html', {'form': form})
 
+@login_required
 def profile(request):
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
@@ -27,6 +31,7 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
+            messages.success(request, "Sikeres volt a profile módosítás!")
             return redirect('profile')
 
     else:

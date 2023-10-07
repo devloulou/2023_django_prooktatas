@@ -1,4 +1,6 @@
-from django.shortcuts import render
+from typing import Any
+from django.db.models.query import QuerySet
+from django.shortcuts import render, get_object_or_404
 
 from django.http import HttpResponse
 
@@ -95,3 +97,17 @@ class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UserPassesTest
         if self.request.user == post.author:
             return True
         return False
+    
+
+class UserPostListView(ListView):
+    model = PostModel
+    template_name = 'blog/user_posts.html'
+    context_object_name = 'posts'
+    paginate_by = 5
+
+    def get_queryset(self):
+        ## itt le kell kérni a user-t
+        # self.request.user.username - az authentikált user neve
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        return PostModel.objects.filter(author=user).order_by('-date_posted')
+        # le kell kérnem a userhez tartozó post-okat és azokat visszaadni
